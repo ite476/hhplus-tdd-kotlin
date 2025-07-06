@@ -53,4 +53,36 @@ tasks.getByName("jar") {
 tasks.test {
     ignoreFailures = true
     useJUnitPlatform()
+    
+    // 테스트 리포트 설정
+    reports {
+        html.required.set(true)
+        junitXml.required.set(true)
+    }
+    
+    // 테스트 실행 시 상세한 로그 출력
+    testLogging {
+        events("passed", "skipped", "failed")
+        showStandardStreams = true
+    }
+}
+
+// JaCoCo 설정 개선
+tasks.jacocoTestReport {
+    reports {
+        xml.required.set(true)
+        html.required.set(true)
+        csv.required.set(false)
+    }
+}
+
+// JaCoCo 커버리지 검증 (선택사항)
+tasks.jacocoTestCoverageVerification {
+    violationRules {
+        rule {
+            limit {
+                minimum = "0.7".toBigDecimal()
+            }
+        }
+    }
 }

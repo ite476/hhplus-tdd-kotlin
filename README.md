@@ -42,6 +42,34 @@ src/
 ./gradlew build
 ```
 
+## 🧪 테스트 결과 리포트 확인
+
+테스트 실행 후, 아래 명령어로 테스트/커버리지 리포트(HTML)를 바로 열어볼 수 있습니다.
+
+### 테스트 결과 리포트 (Test Report)
+- 위치: `build/reports/tests/test/index.html`
+
+#### Mac/Linux
+```bash
+open build/reports/tests/test/index.html
+```
+#### Windows (PowerShell)
+```powershell
+start build/reports/tests/test/index.html
+```
+
+### 코드 커버리지 리포트 (JaCoCo Coverage)
+- 위치: `build/reports/jacoco/test/html/index.html`
+
+#### Mac/Linux
+```bash
+open build/reports/jacoco/test/html/index.html
+```
+#### Windows (PowerShell)
+```powershell
+start build/reports/jacoco/test/html/index.html
+```
+
 ## 📝 개발 가이드
 
 ### TDD 진행 원칙
