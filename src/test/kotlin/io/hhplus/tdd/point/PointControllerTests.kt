@@ -10,6 +10,7 @@ import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch
 
 @WebMvcTest(PointController::class)
 class PointControllerTests {
@@ -31,6 +32,22 @@ class PointControllerTests {
             .andExpect(status().isOk)
             .andExpect(jsonPath("$.id").value(userId))
             .andExpect(jsonPath("$.point").value(expectedPoint))
+            .andExpect(jsonPath("$.updateMillis").exists())
+    }
+
+    @Test
+    fun `포인트 충전 - 정상 충전`() {
+        // given
+        val userId = 1L
+        val amount = 1000L
+
+        // when & then
+        mockMvc.perform(patch("/point/$userId/charge")
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(objectMapper.writeValueAsString(amount)))
+            .andExpect(status().isOk)
+            .andExpect(jsonPath("$.id").value(userId))
+            .andExpect(jsonPath("$.point").value(amount))
             .andExpect(jsonPath("$.updateMillis").exists())
     }
 } 
