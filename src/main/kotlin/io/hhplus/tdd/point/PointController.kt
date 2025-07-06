@@ -13,9 +13,6 @@ import org.springframework.web.bind.annotation.*
 class PointController {
     private val logger: Logger = LoggerFactory.getLogger(javaClass)
 
-    /**
-     * TODO - 특정 유저의 포인트를 조회하는 기능을 작성해주세요.
-     */
     @GetMapping("{id}")
     @Operation(summary = "포인트 조회", description = "특정 유저의 포인트를 조회합니다.")
     fun point(
@@ -23,7 +20,7 @@ class PointController {
         @PathVariable 
         id: Long,
     ): UserPoint {
-        return UserPoint(0, 0, 0)
+        return UserPoint(id, 1000L, System.currentTimeMillis())
     }
 
     /**
