@@ -24,7 +24,13 @@ dependencies {
     implementation(libs.spring.boot.starter.web)
     implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.3.0")
     annotationProcessor(libs.spring.boot.configuration.processor)
+    
+    // kotest & mockk 테스트 의존성
     testImplementation(libs.spring.boot.starter.test)
+    testImplementation("io.kotest:kotest-runner-junit5:5.7.2")
+    testImplementation("io.kotest:kotest-assertions-core:5.7.2")
+    testImplementation("io.mockk:mockk:1.13.9")
+    testImplementation("com.ninja-squad:springmockk:4.0.2")
 }
 
 // about source and compilation
@@ -33,7 +39,7 @@ java {
 }
 
 with(extensions.getByType(JacocoPluginExtension::class.java)) {
-    toolVersion = "0.8.7"
+    toolVersion = "0.8.11"
 }
 
 tasks.withType<KotlinCompile> {
@@ -52,7 +58,7 @@ tasks.getByName("jar") {
 }
 // test tasks
 tasks.test {
-    ignoreFailures = true
+    ignoreFailures = false
     useJUnitPlatform()
     
     // 테스트 리포트 설정
