@@ -1,12 +1,15 @@
 package io.hhplus.tdd.point
 
+import io.hhplus.tdd.point.`PointServiceException 과 그 수하들`.*
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.Parameter
 import io.swagger.v3.oas.annotations.tags.Tag
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
+import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
+import org.springframework.web.server.ResponseStatusException
 
 @RestController
 @RequestMapping("/point")
@@ -23,10 +26,17 @@ class PointController(
         @PathVariable 
         id: Long,
     ): ResponseEntity<UserPoint> {
-        val userPointBalance = pointService.getUserPoint(id)
+        try{
+            val userPointBalance = pointService.getUserPoint(id)
 
-        return ResponseEntity
-            .ok(userPointBalance)
+            return ResponseEntity
+                .ok(userPointBalance)
+        }
+        catch (ex : UserNotFoundException){
+            throw ResponseStatusException(
+                HttpStatus.CONFLICT,
+                "회원이 존재하지 않습니다.")
+        }
     }
 
     @GetMapping("{id}/histories")
@@ -36,10 +46,16 @@ class PointController(
         @PathVariable 
         id: Long,
     ): ResponseEntity<List<PointHistory>> {
-        val userPointHistories = pointService.getPointHistories(id)
+        try{
+            val userPointHistories = pointService.getPointHistories(id)
 
-        return ResponseEntity
-            .ok(userPointHistories)
+            return ResponseEntity
+                .ok(userPointHistories)
+        }catch (ex: UserNotFoundException){
+            throw ResponseStatusException(
+                HttpStatus.CONFLICT,
+                "회원이 존재하지 않습니다.")
+        }
     }
 
     @PatchMapping("{id}/charge")
@@ -52,10 +68,22 @@ class PointController(
         @RequestBody 
         amount: Long,
     ): ResponseEntity<UserPoint> {
-        val chargedUserPointBalance = pointService.chargePoint(id, amount)
+        try{
+            val chargedUserPointBalance = pointService.chargePoint(id, amount)
 
-        return ResponseEntity
-            .ok(chargedUserPointBalance)
+            return ResponseEntity
+                .ok(chargedUserPointBalance)
+        }
+        catch(ex: NegativeChargeAmountException){
+            throw ResponseStatusException(
+                HttpStatus.UNPROCESSABLE_ENTITY,
+                "포인트 충전은 0 이상의 정수만 가능합니다.")
+        }
+        catch (ex: UserNotFoundException){
+            throw ResponseStatusException(
+                HttpStatus.CONFLICT,
+                "회원이 존재하지 않습니다.")
+        }
     }
 
     @PatchMapping("{id}/use")
@@ -68,9 +96,26 @@ class PointController(
         @RequestBody 
         amount: Long,
     ): ResponseEntity<UserPoint> {
-        val usedUserPointBalance = pointService.usePoint(id, amount)
+        try{
+            val usedUserPointBalance = pointService.usePoint(id, amount)
 
-        return ResponseEntity
-            .ok(usedUserPointBalance)
+            return ResponseEntity
+                .ok(usedUserPointBalance)
+        }
+        catch (ex: NegativeUsageException){
+            throw ResponseStatusException(
+                HttpStatus.UNPROCESSABLE_ENTITY,
+                "포인트 사용은 0 이상의 정수만 가능합니다.")
+        }
+        catch (ex: NotEnoughPointException){
+            throw ResponseStatusException(
+                HttpStatus.CONFLICT,
+                "사용할 수 있는 포인트가 부족합니다.")
+        }
+        catch (ex: UserNotFoundException){
+            throw ResponseStatusException(
+                HttpStatus.CONFLICT,
+                "회원이 존재하지 않습니다.")
+        }
     }
 }
