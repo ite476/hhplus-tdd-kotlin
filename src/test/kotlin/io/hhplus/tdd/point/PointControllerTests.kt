@@ -19,7 +19,9 @@ class PointControllerTests {
         )
 
         val mockPointService = mockk<PointService>()
-        every { mockPointService.getUserPoint(userId) } returns expectedUserPoint
+        every {
+            mockPointService.getUserPoint(userId)
+        } returns expectedUserPoint
 
         val sutController = PointController(mockPointService)
 
@@ -53,7 +55,9 @@ class PointControllerTests {
         )
 
         val mockPointService = mockk<PointService>()
-        every { mockPointService.getPointHistories(userId) } returns expectedHistory
+        every {
+            mockPointService.getPointHistories(userId)
+        } returns expectedHistory
 
         val sutController = PointController(mockPointService)
 
@@ -77,7 +81,9 @@ class PointControllerTests {
         )
 
         val mockPointService = mockk<PointService>()
-        every { mockPointService.chargePoint(userId, pointInput) } returns expectedUserPoint
+        every {
+            mockPointService.chargePoint(userId, pointInput)
+        } returns expectedUserPoint
 
         val sutController = PointController(mockPointService)
 
@@ -103,7 +109,9 @@ class PointControllerTests {
         )
 
         val mockPointService = mockk<PointService>()
-        every { mockPointService.usePoint(userId, pointUsage) } returns expectedUserPoint
+        every {
+            mockPointService.usePoint(userId, pointUsage)
+        } returns expectedUserPoint
 
         val sutController = PointController(mockPointService)
 
